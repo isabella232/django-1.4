@@ -259,6 +259,9 @@ class Field(object):
     def get_internal_type(self):
         return self.__class__.__name__
 
+    def get_related_internal_type(self):
+        return self.get_internal_type()
+
     def pre_save(self, model_instance, add):
         """
         Returns field's value just before saving.
@@ -1122,6 +1125,12 @@ class NullBooleanField(Field):
 class PositiveIntegerField(IntegerField):
     description = _("Positive integer")
 
+    def related_db_type(self, connection):
+        if not connection.features.related_fields_match_type:
+            return IntegerField().related_db_type(connection=connection)
+        return super(PositiveIntegerField, self).related_db_type(
+            connection=connection)
+
     def get_internal_type(self):
         return "PositiveIntegerField"
 
@@ -1132,6 +1141,12 @@ class PositiveIntegerField(IntegerField):
 
 class PositiveSmallIntegerField(IntegerField):
     description = _("Positive small integer")
+
+    def related_db_type(self, connection):
+        if not connection.features.related_fields_match_type:
+            return IntegerField().related_db_type(connection=connection)
+        return super(PositiveSmallIntegerField, self).related_db_type(
+            connection=connection)
 
     def get_internal_type(self):
         return "PositiveSmallIntegerField"
