@@ -523,7 +523,7 @@ class AutoField(Field):
         if not (value is None or isinstance(value, (basestring, int, long))):
             msg = self.error_messages['invalid'] % str(value)
             raise exceptions.ValidationError(msg)
-       return value
+        return value
 
     def validate(self, value, model_instance):
         pass
